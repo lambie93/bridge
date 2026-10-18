@@ -314,7 +314,7 @@ const suggestSubmitBtn = suggestForm.querySelector(
 );
 
 // Replace this with your Formspree form endpoint.
-const suggestionEndpoint = "http://localhost:5000/api/suggestions";
+const suggestionEndpoint = "https://bridge-okke.onrender.com/api/suggestions";
 
 // Open the form.
 suggestBtn.addEventListener("click", () => {

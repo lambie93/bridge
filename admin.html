@@ -11,7 +11,7 @@
     <div id="suggestionList"></div>
 
     <script>
-        fetch("http://localhost:5000/api/suggestions")
+        fetch("https://bridge-okke.onrender.com/api/suggestions")
             .then(response => response.json())
             .then(suggestions => {
                 const list = document.getElementById("suggestionList");
@@ -28,7 +28,7 @@
                     const approveBtn = document.createElement("button");
                     approveBtn.textContent = "Approve";
                     approveBtn.addEventListener("click", () => {
-                        fetch("http://localhost:5000/api/suggestions/" + suggestion.id + "/approve",
+                        fetch("https://bridge-okke.onrender.com/api/suggestions" + suggestion.id + "/approve",
                             { method: "POST"})
                             .then(() => card.remove());
                     });
@@ -36,7 +36,7 @@
                     const rejectBtn = document.createElement("button");
                     rejectBtn.textContent = "Reject";
                     rejectBtn.addEventListener("click", ()=> {
-                        fetch("http://localhost:5000/api/suggestions/" + suggestion.id + "/reject",
+                        fetch("https://bridge-okke.onrender.com/api/suggestions" + suggestion.id + "/reject",
                             { method: "POST"})
                             .then(() => card.remove());
                     });
