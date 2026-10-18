@@ -1,0 +1,847 @@
+<!DOCTYPE html>
+<html lang="en-US">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#ffffff">
+
+    <title>Bridge | Opportunities</title>
+
+    <link rel="stylesheet" href="opportunities.css">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Roboto+Condensed:wght@400;500;600;700&display=swap"
+        rel="stylesheet"
+    >
+</head>
+
+<body>
+    <div class="layout">
+
+        <header class="navbar">
+            <a href="index.html" class="logo-container" aria-label="Bridge home">
+                <img
+                    src="images/bridge-logo-removebg-preview.png"
+                    alt="Bridge logo"
+                    width="150"
+                >
+
+                <svg
+                    class="squiggly-line"
+                    viewBox="0 0 300 24"
+                    xmlns="http://www.w3.org/2000/svg"
+                    aria-hidden="true"
+                >
+                    <path
+                        d="M3 12 Q20 2 38 12 T73 12 T108 12 T143 12 T178 12 T213 12 T248 12 T283 12"
+                        fill="none"
+                        stroke="#85b9df"
+                        stroke-width="10"
+                        stroke-linecap="round"
+                    />
+                </svg>
+            </a>
+
+            <nav aria-label="Main navigation">
+                <ul>
+                    <li><a href="classes.html">Classes</a></li>
+                    <li><a href="courses.html">Courses</a></li>
+                    <li><a href="planner.html">Planner</a></li>
+                    <li><a href="opportunities.html" aria-current="page">Opportunities</a></li>
+                    <li><a href="tools.html">Tools</a></li>
+                    <li><a href="games.html">Games</a></li>
+                </ul>
+            </nav>
+        </header>
+
+        <main class="main">
+            <h1 class="page-title">
+                Find Opportunities
+            </h1>
+
+            <section class="search-section" aria-label="Search opportunities">
+                <input
+                    type="search"
+                    id="searchBar"
+                    placeholder="Search opportunities..."
+                    aria-label="Search opportunities"
+                >
+
+                <div class="filter-buttons" aria-label="Opportunity categories">
+                    <button type="button" data-category="all" class="active">All</button>
+                    <button type="button" data-category="Scholarship">Scholarships</button>
+                    <button type="button" data-category="Internship">Internships</button>
+                    <button type="button" data-category="Program">Programs</button>
+                    <button type="button" data-category="Competition">Competitions</button>
+                    <button type="button" data-category="Volunteer">Volunteer</button>
+                    <button type="button" data-category="Research">Research</button>
+                    <button type="button" data-category="Hackathon">Hackathons</button>
+                </div>
+
+              <button type="button" id="suggestOpportunityBtn">
+    <span aria-hidden="true">＋</span>
+    Suggest an Opportunity
+</button>  
+            </section>
+
+            <!-- SUGGEST AN OPPORTUNITY DIALOG -->
+<dialog id="suggestOpportunityDialog" class="suggest-dialog">
+    <div class="suggest-dialog-header">
+        <div>
+            <p class="suggest-eyebrow">HELP GROW BRIDGE</p>
+            <h2>Suggest an Opportunity</h2>
+            <p>Know of a great opportunity we're missing? Send it our way!</p>
+        </div>
+
+        <button
+            type="button"
+            class="suggest-close"
+            id="closeSuggestDialog"
+            aria-label="Close form"
+        >&times;</button>
+    </div>
+
+    <form id="suggestOpportunityForm">
+        <p class="required-note">Fields marked * are required.</p>
+
+        <div class="suggest-form-group">
+            <label for="suggestTitle">Opportunity Name *</label>
+            <input
+                type="text"
+                id="suggestTitle"
+                name="Opportunity Name"
+                placeholder="e.g. MITES Summer Program"
+                maxlength="150"
+                required
+            >
+        </div>
+
+        <div class="suggest-form-group">
+            <label for="suggestOrganization">Organization *</label>
+            <input
+                type="text"
+                id="suggestOrganization"
+                name="Organization"
+                placeholder="Who runs this opportunity?"
+                maxlength="150"
+                required
+            >
+        </div>
+
+        <div class="suggest-form-group">
+            <label for="suggestWebsite">Official Website *</label>
+            <input
+                type="url"
+                id="suggestWebsite"
+                name="Official Website"
+                placeholder="https://example.org"
+                maxlength="500"
+                pattern="https://.*"
+                title="Enter a website address beginning with https://"
+                required
+            >
+        </div>
+
+        <div class="suggest-form-group">
+            <label for="suggestCategory">Category *</label>
+            <select id="suggestCategory" name="Category" required>
+                <option value="">Select a category</option>
+                <option value="Scholarship">Scholarship</option>
+                <option value="Internship">Internship</option>
+                <option value="Program">Program</option>
+                <option value="Competition">Competition</option>
+                <option value="Volunteer">Volunteer</option>
+                <option value="Research">Research</option>
+                <option value="Hackathon">Hackathon</option>
+            </select>
+        </div>
+
+        <div class="suggest-form-group">
+            <label for="suggestDescription">Description *</label>
+            <textarea
+                id="suggestDescription"
+                name="Description"
+                rows="4"
+                maxlength="1500"
+                placeholder="What is this opportunity, and why should students know about it?"
+                required
+            ></textarea>
+        </div>
+
+        <div class="suggest-form-row">
+            <div class="suggest-form-group">
+                <label for="suggestGrades">Eligible Grades</label>
+                <input
+                    type="text"
+                    id="suggestGrades"
+                    name="Eligible Grades"
+                    placeholder="e.g. Grades 9–12"
+                    maxlength="150"
+                >
+            </div>
+
+            <div class="suggest-form-group">
+                <label for="suggestCost">Cost</label>
+                <select id="suggestCost" name="Cost">
+                    <option value="">Not sure</option>
+                    <option value="Free">Free</option>
+                    <option value="Paid">Paid</option>
+                    <option value="Costs Associated">Costs associated</option>
+                </select>
+            </div>
+        </div>
+
+        <div class="suggest-form-row">
+            <div class="suggest-form-group">
+                <label for="suggestLocation">Location</label>
+                <select id="suggestLocation" name="Location">
+                    <option value="">Not sure</option>
+                    <option value="In-Person">In-person</option>
+                    <option value="Virtual">Virtual</option>
+                    <option value="Hybrid">Hybrid</option>
+                </select>
+            </div>
+
+            <div class="suggest-form-group">
+                <label for="suggestDeadline">Application Deadline</label>
+                <input
+                    type="date"
+                    id="suggestDeadline"
+                    name="Application Deadline"
+                >
+            </div>
+        </div>
+
+        <div class="suggest-form-group">
+            <label for="suggestNotes">Additional Information</label>
+            <textarea
+                id="suggestNotes"
+                name="Additional Information"
+                rows="2"
+                maxlength="1000"
+                placeholder="Eligibility details, application dates, or anything else we should know."
+            ></textarea>
+        </div>
+
+        <p class="suggest-review-note">
+            Submissions are suggestions, not guaranteed listings.
+            Every opportunity will be reviewed before it is published.
+        </p>
+
+        <p id="suggestFormStatus" role="status" aria-live="polite"></p>
+
+        <div class="suggest-form-actions">
+            <button type="button" id="cancelSuggestBtn" class="suggest-cancel-btn">
+                Cancel
+            </button>
+            <button type="submit" class="suggest-submit-btn">
+                Submit for Review <span aria-hidden="true">→</span>
+            </button>
+        </div>
+    </form>
+</dialog>
+
+            <aside class="filter-sidebar" aria-label="Opportunity filters">
+                <h2>Filters</h2>
+
+                <div class="filter-group">
+                    <label for="ageSelect">Age</label>
+                    <select id="ageSelect" data-filter="age">
+                        <option value="">All</option>
+                        <option value="13">13</option>
+                        <option value="14">14</option>
+                        <option value="15">15</option>
+                        <option value="16">16</option>
+                        <option value="17">17</option>
+                        <option value="18">18</option>
+                    </select>
+                </div>
+
+                <fieldset class="filter-group">
+                    <legend>Grade</legend>
+                    <label><input type="checkbox" value="9th Grade" data-filter="grades"> 9th Grade</label>
+                    <label><input type="checkbox" value="10th Grade" data-filter="grades"> 10th Grade</label>
+                    <label><input type="checkbox" value="11th Grade" data-filter="grades"> 11th Grade</label>
+                    <label><input type="checkbox" value="12th Grade" data-filter="grades"> 12th Grade</label>
+                    <label><input type="checkbox" value="High School" data-filter="grades"> High School</label>
+                    <label><input type="checkbox" value="Incoming College Freshmen" data-filter="grades"> Incoming College Freshmen</label>
+                </fieldset>
+
+                <fieldset class="filter-group">
+                    <legend>Time of Year</legend>
+                    <label><input type="checkbox" value="School Year" data-filter="time"> School Year</label>
+                    <label><input type="checkbox" value="Summer" data-filter="time"> Summer</label>
+                </fieldset>
+
+                <fieldset class="filter-group">
+                    <legend>Season</legend>
+                    <label><input type="checkbox" value="Spring" data-filter="season"> Spring</label>
+                    <label><input type="checkbox" value="Summer" data-filter="season"> Summer</label>
+                    <label><input type="checkbox" value="Fall" data-filter="season"> Fall</label>
+                    <label><input type="checkbox" value="Winter" data-filter="season"> Winter</label>
+                </fieldset>
+
+                <fieldset class="filter-group">
+                    <legend>Cost</legend>
+                    <label><input type="checkbox" value="Paid" data-filter="cost"> Paid</label>
+                    <label><input type="checkbox" value="Free" data-filter="cost"> Free</label>
+                    <label><input type="checkbox" value="Costs Associated" data-filter="cost"> Costs Associated</label>
+                </fieldset>
+
+                <fieldset class="filter-group">
+                    <legend>Location</legend>
+                    <label><input type="checkbox" value="In-Person" data-filter="location"> In-Person</label>
+                    <label><input type="checkbox" value="Virtual" data-filter="location"> Virtual</label>
+                </fieldset>
+
+                <fieldset class="filter-group">
+                    <legend>Status</legend>
+                    <label><input type="checkbox" value="Open" data-filter="status"> Open</label>
+                    <label><input type="checkbox" value="Closed" data-filter="status"> Closed</label>
+                    <label><input type="checkbox" value="Ends Soon" data-filter="status"> Ends Soon</label>
+                </fieldset>
+
+                <fieldset class="filter-group">
+                    <legend>Gender</legend>
+                    <label>
+                        <input type="checkbox" value="Female-Identifying Students" data-filter="gender">
+                        Female-Identifying Students
+                    </label>
+                    <label>
+                        <input type="checkbox" value="Male-Identifying Students" data-filter="gender">
+                        Male-Identifying Students
+                    </label>
+                </fieldset>
+
+                <button type="button" id="resetFilters">Reset Filters</button>
+            </aside>
+
+            <section class="card-grid" id="cardGrid" aria-label="Available opportunities">
+
+                <!-- GIRLS WHO CODE -->
+                <article
+                    class="card"
+                    data-category="Program"
+                    data-time="School Year"
+                    data-season="Spring"
+                    data-cost="Free"
+                    data-location="Virtual"
+                    data-status="Open"
+                    data-gender="Female-Identifying Students"
+                    data-grades="9th Grade,10th Grade,11th Grade,12th Grade,High School"
+                    data-ages="13,14,15,16,17,18,All Ages"
+                >
+                    <div class="card-top-tags">
+                        <span class="tag program">Program</span>
+                        <span class="detail-tag free-tag">Free</span>
+                        <span class="detail-tag open-tag">Open</span>
+                    </div>
+
+                    <img src="images/pathways_icon@2x.png" alt="Girls Who Code logo">
+
+                    <h3>Girls Who Code Spring Pathways</h3>
+
+                    <div class="opportunity-details">
+                        <div class="location-info">
+                            <svg
+                                class="location-pin"
+                                viewBox="0 0 24 24"
+                                fill="none"
+                                stroke="currentColor"
+                                stroke-width="1.8"
+                                stroke-linecap="round"
+                                stroke-linejoin="round"
+                                aria-hidden="true"
+                            >
+                                <path d="M20 10c0 5-8 12-8 12S4 15 4 10a8 8 0 1 1 16 0Z"/>
+                                <circle cx="12" cy="10" r="2.5"/>
+                            </svg>
+                            <span>Remote / Virtual</span>
+                        </div>
+
+                        <div class="opportunity-tags">
+                            <div class="tag-row">
+                                <span class="detail-tag season-tag">Spring</span>
+                                <span class="detail-tag school-year-tag">School Year</span>
+                            </div>
+
+                            <div class="tag-row">
+                                <span class="detail-tag grade-tag">9th Grade</span>
+                                <span class="detail-tag grade-tag">10th Grade</span>
+                                <span class="detail-tag grade-tag">11th Grade</span>
+                                <span class="detail-tag grade-tag">12th Grade</span>
+                                <span class="detail-tag grade-tag">High School</span>
+                            </div>
+
+                            <div class="tag-row">
+                                <span class="detail-tag age-tag">13</span>
+                                <span class="detail-tag age-tag">14</span>
+                                <span class="detail-tag age-tag">15</span>
+                                <span class="detail-tag age-tag">16</span>
+                                <span class="detail-tag age-tag">17</span>
+                                <span class="detail-tag age-tag">18</span>
+                                <span class="detail-tag age-tag">13–18</span>
+                            </div>
+
+                            <div class="tag-row">
+                                <span class="detail-tag female-tag">Female-Identifying Students</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <a
+                        href="https://girlswhocode.com/programs/pathways"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        class="website-link"
+                    >Website ↗</a>
+                </article>
+
+                <!-- MOMATH -->
+                <article
+                    class="card"
+                    data-category="Volunteer"
+                    data-time="Summer"
+                    data-season="Summer"
+                    data-cost="Free"
+                    data-location="In-Person"
+                    data-city="NYC"
+                    data-status="Closed"
+                    data-grades="9th Grade,10th Grade,11th Grade,12th Grade,High School"
+                    data-ages="13,14,15,16,17,18,All Ages"
+                >
+                    <div class="card-top-tags">
+                        <span class="tag volunteer">Volunteer</span>
+                        <span class="detail-tag free-tag">Free</span>
+                        <span class="detail-tag closed-tag">Closed</span>
+                    </div>
+
+                    <img src="images/momath-logo.gif" alt="National Museum of Mathematics logo">
+
+                    <h3>National Museum of Mathematics (MoMath) Summer Integrators Volunteer Program</h3>
+
+                    <div class="opportunity-details">
+                        <div class="location-info">
+                            <svg
+                                class="location-pin"
+                                viewBox="0 0 24 24"
+                                fill="none"
+                                stroke="currentColor"
+                                stroke-width="1.8"
+                                stroke-linecap="round"
+                                stroke-linejoin="round"
+                                aria-hidden="true"
+                            >
+                                <path d="M20 10c0 5-8 12-8 12S4 15 4 10a8 8 0 1 1 16 0Z"/>
+                                <circle cx="12" cy="10" r="2.5"/>
+                            </svg>
+                            <span>In-Person · NYC</span>
+                        </div>
+
+                        <div class="opportunity-tags">
+                            <div class="tag-row">
+                                <span class="detail-tag summer-tag">Summer</span>
+                            </div>
+
+                            <div class="tag-row">
+                                <span class="detail-tag grade-tag">9th Grade</span>
+                                <span class="detail-tag grade-tag">10th Grade</span>
+                                <span class="detail-tag grade-tag">11th Grade</span>
+                                <span class="detail-tag grade-tag">12th Grade</span>
+                                <span class="detail-tag grade-tag">High School</span>
+                            </div>
+
+                            <div class="tag-row">
+                                <span class="detail-tag age-tag">13</span>
+                                <span class="detail-tag age-tag">14</span>
+                                <span class="detail-tag age-tag">15</span>
+                                <span class="detail-tag age-tag">16</span>
+                                <span class="detail-tag age-tag">17</span>
+                                <span class="detail-tag age-tag">18</span>
+                                <span class="detail-tag age-tag">13–18</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <a
+                        href="https://momath.org/jobs/volunteers/"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        class="website-link"
+                    >Website ↗</a>
+                </article>
+
+                <!-- STARDANCE -->
+                <article
+                    class="card"
+                    data-category="Hackathon"
+                    data-time="School Year,Summer"
+                    data-season="Summer,Fall"
+                    data-cost="Free"
+                    data-location="Virtual"
+                    data-status="Open,Ends Soon"
+                    data-grades="9th Grade,10th Grade,11th Grade,12th Grade,High School"
+                    data-ages="13,14,15,16,17,18,All Ages"
+                >
+                    <div class="card-top-tags">
+                        <span class="tag program">Program</span>
+                        <span class="tag hackathon">Hackathon</span>
+                        <span class="detail-tag free-tag">Free</span>
+                        <span class="detail-tag open-tag">Open</span>
+                        <span class="detail-tag ends-soon-tag">Ends Soon</span>
+                    </div>
+
+                    <img src="images/images (1).jpg" alt="Stardance Challenge">
+
+                    <h3>Stardance Challenge</h3>
+
+                    <div class="opportunity-details">
+                        <div class="location-info">
+                            <svg
+                                class="location-pin"
+                                viewBox="0 0 24 24"
+                                fill="none"
+                                stroke="currentColor"
+                                stroke-width="1.8"
+                                stroke-linecap="round"
+                                stroke-linejoin="round"
+                                aria-hidden="true"
+                            >
+                                <path d="M20 10c0 5-8 12-8 12S4 15 4 10a8 8 0 1 1 16 0Z"/>
+                                <circle cx="12" cy="10" r="2.5"/>
+                            </svg>
+                            <span>Remote / Virtual</span>
+                        </div>
+
+                        <div class="opportunity-tags">
+                            <div class="tag-row">
+                                <span class="detail-tag summer-tag">Summer</span>
+                                <span class="detail-tag fall-tag">Fall</span>
+                                <span class="detail-tag school-year-tag">School Year</span>
+                            </div>
+
+                            <div class="tag-row">
+                                <span class="detail-tag grade-tag">9th Grade</span>
+                                <span class="detail-tag grade-tag">10th Grade</span>
+                                <span class="detail-tag grade-tag">11th Grade</span>
+                                <span class="detail-tag grade-tag">12th Grade</span>
+                                <span class="detail-tag grade-tag">High School</span>
+                            </div>
+
+                            <div class="tag-row">
+                                <span class="detail-tag age-tag">13</span>
+                                <span class="detail-tag age-tag">14</span>
+                                <span class="detail-tag age-tag">15</span>
+                                <span class="detail-tag age-tag">16</span>
+                                <span class="detail-tag age-tag">17</span>
+                                <span class="detail-tag age-tag">18</span>
+                                <span class="detail-tag age-tag">13–18</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="deadline">
+                        <strong>Deadline:</strong> Saturday, October 31, 2026
+                    </div>
+
+                    <a
+                        href="https://stardance.hackclub.com"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        class="website-link"
+                    >Website ↗</a>
+                </article>
+
+<article
+    class="card"
+    data-category="Program"
+    data-time="Summer"
+    data-season="Summer"
+    data-cost="Free"
+    data-status="Closed"
+    data-gender="Male-Identifying Students"
+    data-grades="9th Grade,10th Grade,11th Grade,12th Grade,High School"
+    data-ages="13,14,15,16,17,18"
+>
+                    <div class="card-top-tags">
+                        <span class="tag program">Program</span>
+                        <span class="detail-tag free-tag">Free</span>
+                        <span class="detail-tag closed-tag">Closed</span>
+                    </div>
+
+                    <img src="images/AllStarCode.png" alt="AllStarCode logo">
+
+                    <h3>AllStarCode Summer Intensive</h3>
+
+                    <div class="opportunity-details">
+                        <div class="location-info">
+    <svg
+        class="location-pin"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="1.8"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+        aria-hidden="true"
+    >
+        <path d="M20 10c0 5-8 12-8 12S4 15 4 10a8 8 0 1 1 16 0Z" />
+        <circle cx="12" cy="10" r="2.5" />
+    </svg>
+    <span>In-Person · NYC</span>
+</div>
+                        <div class="opportunity-tags">
+                            <div class="tag-row">
+                                <span class="detail-tag summer-tag">Summer</span>
+                            </div>
+
+              <div class="tag-row">
+                                <span class="detail-tag grade-tag">9th Grade</span>
+                                <span class="detail-tag grade-tag">10th Grade</span>
+                                <span class="detail-tag grade-tag">11th Grade</span>
+                                <span class="detail-tag grade-tag">12th Grade</span>
+                                <span class="detail-tag grade-tag">High School</span>
+                            </div>
+
+                            <div class="tag-row">
+                                <span class="detail-tag age-tag">13</span>
+                                <span class="detail-tag age-tag">14</span>
+                                <span class="detail-tag age-tag">15</span>
+                                <span class="detail-tag age-tag">16</span>
+                                <span class="detail-tag age-tag">17</span>
+                                <span class="detail-tag age-tag">18</span>
+                                <span class="detail-tag age-tag">13–18</span>
+                            </div>
+
+                            <div class="tag-row">
+                                <span class="detail-tag male-tag">Male-Identifying Students</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <a
+                        href="https://allstarcode.org/apply/si26/"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        class="website-link"
+                    >Website ↗</a>
+                </article>
+
+                <!-- MET MUSEUM -->
+                <article
+                    class="card"
+                    data-category="Internship"
+                    data-time="Summer"
+                    data-season="Summer"
+                    data-cost="Free,Paid"
+                    data-status="Closed"
+                    data-grades="9th Grade,10th Grade,11th Grade,12th Grade,High School"
+                    data-ages="13,14,15,16,17,18,13-18,All Ages"
+                >
+                    <div class="card-top-tags">
+                        <span class="tag internship">Internship</span>
+                        <span class="detail-tag free-tag">Free</span>
+                        <span class="detail-tag paid-tag">Paid</span>
+                        <span class="detail-tag closed-tag">Closed</span>
+                    </div>
+
+                    <img
+                        src="images/20BREUER-articleLarge-v2.avif"
+                        alt="The Metropolitan Museum of Art logo"
+                    >
+
+                    <h3>Metropolitan Museum of Art Summer Internships for High School Students</h3>
+
+                    <div class="opportunity-details">
+                        <div class="location-info">
+    <svg
+        class="location-pin"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="1.8"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+        aria-hidden="true"
+    >
+        <path d="M20 10c0 5-8 12-8 12S4 15 4 10a8 8 0 1 1 16 0Z" />
+        <circle cx="12" cy="10" r="2.5" />
+    </svg>
+    <span>In-Person · NYC</span>
+</div>
+                        <div class="opportunity-tags">
+                            <div class="tag-row">
+                                <span class="detail-tag summer-tag">Summer</span>
+                            </div>
+
+                            <div class="tag-row">
+                                <span class="detail-tag grade-tag">9th Grade</span>
+                                <span class="detail-tag grade-tag">10th Grade</span>
+                                <span class="detail-tag grade-tag">11th Grade</span>
+                                <span class="detail-tag grade-tag">12th Grade</span>
+                                <span class="detail-tag grade-tag">High School</span>
+                            </div>
+
+                            <div class="tag-row">
+                                <span class="detail-tag age-tag">13</span>
+                                <span class="detail-tag age-tag">14</span>
+                                <span class="detail-tag age-tag">15</span>
+                                <span class="detail-tag age-tag">16</span>
+                                <span class="detail-tag age-tag">17</span>
+                                <span class="detail-tag age-tag">18</span>
+                                <span class="detail-tag age-tag">13–18</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <a
+                        href="https://www.metmuseum.org/opportunities/internships/summer-internships-for-high-school-students"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        class="website-link"
+                    >Website ↗</a>
+                </article>
+
+                <!-- MUSEUM OF JEWISH HERITAGE -->
+                <article
+                    class="card"
+                    data-category="Internship"
+                    data-time="Summer"
+                    data-season="Summer"
+                    data-cost="Free,Paid"
+                    data-grades="9th Grade,10th Grade,11th Grade,12th Grade,High School"
+                    data-ages="13,14,15,16,17,18,13-18,All Ages"
+                >
+                    <div class="card-top-tags">
+                        <span class="tag internship">Internship</span>
+                        <span class="detail-tag free-tag">Free</span>
+                        <span class="detail-tag paid-tag">Paid</span>
+                    </div>
+
+                    <img
+                        src="images/MJH-Logo-2200px.jpg"
+                        alt="Museum of Jewish Heritage logo"
+                    >
+
+                    <h3>Museum of Jewish Heritage High School Apprenticeship Program</h3>
+
+                    <div class="opportunity-details">
+                        <div class="location-info">
+    <svg
+        class="location-pin"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="1.8"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+        aria-hidden="true"
+    >
+        <path d="M20 10c0 5-8 12-8 12S4 15 4 10a8 8 0 1 1 16 0Z" />
+        <circle cx="12" cy="10" r="2.5" />
+    </svg>
+    <span>In-Person · NYC</span>
+</div>
+                        <div class="opportunity-tags">
+                            <div class="tag-row">
+                                <span class="detail-tag summer-tag">Summer</span>
+                            </div>
+
+                            <div class="tag-row">
+                                <span class="detail-tag grade-tag">9th Grade</span>
+                                <span class="detail-tag grade-tag">10th Grade</span>
+                                <span class="detail-tag grade-tag">11th Grade</span>
+                                <span class="detail-tag grade-tag">12th Grade</span>
+                                <span class="detail-tag grade-tag">High School</span>
+                            </div>
+
+                            <div class="tag-row">
+                                <span class="detail-tag age-tag">13</span>
+                                <span class="detail-tag age-tag">14</span>
+                                <span class="detail-tag age-tag">15</span>
+                                <span class="detail-tag age-tag">16</span>
+                                <span class="detail-tag age-tag">17</span>
+                                <span class="detail-tag age-tag">18</span>
+                                <span class="detail-tag age-tag">13–18</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <a
+                        href="https://mjhnyc.org/about-the-museum-of-jewish-heritage/internships-and-fellowships/#hsap
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        class="website-link"
+                    >Website ↗</a>
+                </article>
+
+                <!-- JANE STREET AMP -->
+                <article
+                    class="card"
+                    data-category="Program"
+                    data-grades="Incoming College Freshmen"
+                    data-ages="18"
+                >
+                    <div class="card-top-tags">
+                        <span class="tag program">Program</span>
+                    </div>
+
+                    <img
+                        src="images/Program_banners_AMP-72a7e8e1d6dff05d896c6ea5c0f95f61ccffd14c362de1c4885a1e76cab6f0b6.png"
+                        alt="Jane Street Academy of Math and Programming logo"
+                    >
+
+                    <h3>Jane Street Academy of Math and Programming (AMP)</h3>
+
+                    <div class="opportunity-details">
+                        <div class="location-info">
+    <svg
+        class="location-pin"
+        viewBox="0 0 24 24"
+        fill="none"
+        stroke="currentColor"
+        stroke-width="1.8"
+        stroke-linecap="round"
+        stroke-linejoin="round"
+        aria-hidden="true"
+    >
+        <path d="M20 10c0 5-8 12-8 12S4 15 4 10a8 8 0 1 1 16 0Z" />
+        <circle cx="12" cy="10" r="2.5" />
+    </svg>
+    <span>In-Person · NYC</span>
+</div>
+
+                            <div class="tag-row">
+                                <span class="detail-tag summer-tag">Summer</span>
+                            </div>
+                        <div class="tag-row">
+                            <span class="detail-tag grade-tag">Incoming College Freshmen</span>
+                        </div>
+
+                        <div class="tag-row">
+                            <span class="detail-tag age-tag">18</span>
+                        </div>
+                    </div>
+
+                    <a
+                        href="https://www.janestreet.com/join-jane-street/programs-and-events/amp/"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        class="website-link"
+                    >Website ↗</a>
+                </article>
+
+            </section>
+
+            <div class="controls">
+                <button type="button" id="add-btn">Add 1 Card</button>
+                <button type="button" id="remove-btn">Remove 1 Card</button>
+            </div>
+        </main>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
