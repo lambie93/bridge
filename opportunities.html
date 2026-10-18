@@ -90,7 +90,6 @@
 <dialog id="suggestOpportunityDialog" class="suggest-dialog">
     <div class="suggest-dialog-header">
         <div>
-            <p class="suggest-eyebrow">HELP GROW BRIDGE</p>
             <h2>Suggest an Opportunity</h2>
             <p>Know of a great opportunity we're missing? Send it our way!</p>
         </div>
@@ -111,9 +110,7 @@
             <input
                 type="text"
                 id="suggestTitle"
-                name="Opportunity Name"
-                placeholder="e.g. MITES Summer Program"
-                maxlength="150"
+                name="Opportunity"
                 required
             >
         </div>
@@ -124,7 +121,6 @@
                 type="text"
                 id="suggestOrganization"
                 name="Organization"
-                placeholder="Who runs this opportunity?"
                 maxlength="150"
                 required
             >
@@ -135,9 +131,7 @@
             <input
                 type="url"
                 id="suggestWebsite"
-                name="Official Website"
-                placeholder="https://example.org"
-                maxlength="500"
+                name="Website"
                 pattern="https://.*"
                 title="Enter a website address beginning with https://"
                 required
@@ -147,7 +141,6 @@
         <div class="suggest-form-group">
             <label for="suggestCategory">Category *</label>
             <select id="suggestCategory" name="Category" required>
-                <option value="">Select a category</option>
                 <option value="Scholarship">Scholarship</option>
                 <option value="Internship">Internship</option>
                 <option value="Program">Program</option>
@@ -158,72 +151,92 @@
             </select>
         </div>
 
-        <div class="suggest-form-group">
-            <label for="suggestDescription">Description *</label>
-            <textarea
-                id="suggestDescription"
-                name="Description"
-                rows="4"
-                maxlength="1500"
-                placeholder="What is this opportunity, and why should students know about it?"
-                required
-            ></textarea>
-        </div>
-
         <div class="suggest-form-row">
             <div class="suggest-form-group">
-                <label for="suggestGrades">Eligible Grades</label>
-                <input
-                    type="text"
-                    id="suggestGrades"
-                    name="Eligible Grades"
-                    placeholder="e.g. Grades 9–12"
-                    maxlength="150"
-                >
+                <label for="suggestGrades">Eligible Grades *</label>
+                <select id="suggestGrades" name="Grades">
+                    <option value="9th Grade">9th Grade</option>
+                    <option value="10th Grade">10th Grade</option>
+                    <option value="11th Grade">11th Grade</option>
+                    <option value="12th Grade">12th Grade</option>
+                    <option value="High School Underclassman">High School Underclassman</option>
+                    <option value="High School Upperclassman">High School Upperclassman</option>
+                    <option value="High School">High School</option>
+                    <option value="Incoming College Freshman">Incoming College Freshman</option>
+                </select>
             </div>
 
             <div class="suggest-form-group">
-                <label for="suggestCost">Cost</label>
-                <select id="suggestCost" name="Cost">
-                    <option value="">Not sure</option>
-                    <option value="Free">Free</option>
-                    <option value="Paid">Paid</option>
-                    <option value="Costs Associated">Costs associated</option>
+                <label for="suggestAge">Eligible Ages *</label>
+                <select id="suggestAge" name="Age">
+                    <option value="13">13</option>
+                    <option value="14">14</option>
+                    <option value="15">15</option>
+                    <option value="16">16</option>
+                    <option value="17">17</option>
+                    <option value="18">18</option>
+                    <option value="13-18">13 - 18</option>
+                </select>
+            </div>
+
+            <div class="suggest-form-group">
+                <label for="suggestGender">Gender *</label>
+                <select id="suggestGender" name="Gender">
+                    <option value="Both">Both</option>
+                    <option value="Female">Female-Identifying</option>
+                    <option value="Male">Male-Identifying</option>
                 </select>
             </div>
         </div>
 
         <div class="suggest-form-row">
             <div class="suggest-form-group">
-                <label for="suggestLocation">Location</label>
+                <label for="suggestCost">Cost *</label>
+                <select id="suggestCost" name="Cost">
+                    <option value="Free">Free</option>
+                    <option value="Paid">Paid</option>
+                    <option value="Costs Associated">Costs Associated</option>
+                </select>
+            </div>
+
+            <div class="suggest-form-group">
+                <label for="suggestLocation">Location *</label>
                 <select id="suggestLocation" name="Location">
-                    <option value="">Not sure</option>
-                    <option value="In-Person">In-person</option>
+                    <option value="In-Person">In-Person</option>
                     <option value="Virtual">Virtual</option>
                     <option value="Hybrid">Hybrid</option>
                 </select>
             </div>
+</div>
 
-            <div class="suggest-form-group">
-                <label for="suggestDeadline">Application Deadline</label>
-                <input
-                    type="date"
-                    id="suggestDeadline"
-                    name="Application Deadline"
-                >
-            </div>
+        <div class="suggest-form-row">
+        <div class="suggest-form-group">
+            <label for="suggestYearTime">Time of Year *</label>
+            <select id="suggestYearTime" name="Time">
+                <option value="Summer">Summer</option>
+                <option value="School Year">School Year</option>
+            </select>
         </div>
 
         <div class="suggest-form-group">
-            <label for="suggestNotes">Additional Information</label>
-            <textarea
-                id="suggestNotes"
-                name="Additional Information"
-                rows="2"
-                maxlength="1000"
-                placeholder="Eligibility details, application dates, or anything else we should know."
-            ></textarea>
+            <label for="suggestSeason">Season *</label>
+            <select id="suggestSeason" name="Season">
+                <option value="Winter">Winter</option>
+                <option value="Spring">Spring</option>
+                <option value="Summer">Summer</option>
+                <option value="Fall">Fall</option>
+            </select>
         </div>
+        </div>
+
+            <div class="suggest-form-group">
+                <label for="suggestDeadline">Deadline</label>
+                <input
+                    type="date"
+                    id="suggestDeadline"
+                    name="Deadline"
+                >
+            </div>
 
         <p class="suggest-review-note">
             Submissions are suggestions, not guaranteed listings.

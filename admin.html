@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en-US">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bridge | Review Suggestions</title>
+    <link rel="stylesheet" href="opportunities.css">
+</head>
+<body>
+    <h1>Pending Suggestions</h1>
+    <div id="suggestionList"></div>
+
+    <script>
+        fetch("http://localhost:5000/api/suggestions")
+            .then(response => response.json())
+            .then(suggestions => {
+                const list = document.getElementById("suggestionList");
+
+                suggestions.forEach(suggestion => {
+                    const card = document.createElement("div");
+                    card.innerHTML =
+                        "<h3>" + suggestion.opportunity_name + "</h3>" +
+                        "<p>" + suggestion.organization + " — " +
+                        suggestion.category + "</p>" +
+                        '<a href="' + suggestion.official_website + '">Website</a>';
+                    list.appendChild(card);
+
+                    const approveBtn = document.createElement("button");
+                    approveBtn.textContent = "Approve";
+                    approveBtn.addEventListener("click", () => {
+                        fetch("http://localhost:5000/api/suggestions/" + suggestion.id + "/approve",
+                            { method: "POST"})
+                            .then(() => card.remove());
+                    });
+
+                    const rejectBtn = document.createElement("button");
+                    rejectBtn.textContent = "Reject";
+                    rejectBtn.addEventListener("click", ()=> {
+                        fetch("http://localhost:5000/api/suggestions/" + suggestion.id + "/reject",
+                            { method: "POST"})
+                            .then(() => card.remove());
+                    });
+
+                    card.appendChild(approveBtn);
+                    card.appendChild(rejectBtn);
+                });
+            });
+    </script>
+</body>
+</html>

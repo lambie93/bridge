@@ -314,7 +314,7 @@ const suggestSubmitBtn = suggestForm.querySelector(
 );
 
 // Replace this with your Formspree form endpoint.
-const suggestionEndpoint = "https://formspree.io/f/YOUR_FORM_ID";
+const suggestionEndpoint = "http://localhost:5000/api/suggestions";
 
 // Open the form.
 suggestBtn.addEventListener("click", () => {
@@ -407,3 +407,55 @@ function suggestEndpointIsNotConfigured() {
     return suggestionEndpoint.includes("YOUR_FORM_ID");
 }
 
+function loadApprovedOpportunities() {
+    const grid = document.getElementById("cardGrid");
+
+    if (!grid) {
+        return;
+    }
+
+    fetch("http://localhost:5000/api/opportunities")
+        .then(response => response.json())
+        .then(opportunities => {
+            opportunities.forEach(opp => {
+                const card = document.createElement("article");
+                card.className = "card";
+
+                card.dataset.category = opp.category || "";
+                card.dataset.cost = opp.cost || "";
+                card.dataset.location = opp.location || "";
+                card.dataset.grades = opp.eligible_grades || "";
+                card.dataset.ages = opp.eligible_ages || "";
+                card.dataset.season = opp.season || "";
+                card.dataset.time = opp.time_of_year || "";
+
+                let genderPill = "";
+                if (opp.gender && opp.gender !== "Both") {
+                    genderPill = 
+                    '<span class="detail-tag">' + opp.gender + "</span>";
+                    card.dataset.gender = opp.gender;
+                }
+
+                card.innerHTML =
+                '<div class="card-top-tags">' +
+                '<span class="tag">' + opp.category + "</span>" + 
+                "</div>" +
+                "<h3>" + opp.opportunity_name + "</h3>" +
+                '<div class="opportunity-tags"><div class="tag-row">' +
+                        '<span class="detail-tag grade-tag">' + opp.eligible_grades + "</span>" +
+                        '<span class="detail-tag age-tag">' + opp.eligible_ages + "</span>" +
+                        '<span class="detail-tag">' + opp.cost + "</span>" +
+                        '<span class="detail-tag">' + opp.location + "</span>" +
+                        genderPill +
+                    "</div></div>" +
+                    '<a href="' + opp.official_website + '" target="_blank" ' +
+                        'rel="noopener noreferrer" class="website-link">Website ↗</a>';
+
+                grid.appendChild(card);
+            });
+
+            filterAll();   // re-run filters so the new cards obey them
+        });
+}
+
+document.addEventListener("DOMContentLoaded", loadApprovedOpportunities);
