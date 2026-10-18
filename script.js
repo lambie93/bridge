@@ -414,7 +414,7 @@ function loadApprovedOpportunities() {
         return;
     }
 
-    fetch("http://localhost:5000/api/opportunities")
+    fetch("https://bridge-okke.onrender.com/api/opportunities")
         .then(response => response.json())
         .then(opportunities => {
             opportunities.forEach(opp => {
