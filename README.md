@@ -7,5 +7,3 @@ There are filtering tools to filter by criteria - ex. some need to be female ide
 The website is at a live URL and open source on GitHub.
 
 There will be an admin dashboard to add, edit, and remove opportunities. Users will also be able to suggest opportunities and have them reviewed by an admin.
-
-We are going to build our own backend for this.
