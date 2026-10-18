@@ -109,4 +109,5 @@ def reject_suggestion(suggestion_id):
     db.close()
     return jsonify({"message": "Rejected!"})
 
-app.run(debug=True)
+if __name__ == "__main__":
+    app.run(debug=True)
