@@ -9,7 +9,10 @@ CORS(app)
 
 
 def check_password():
-    return request.headers.get("X-Admin-Password") == os.environ.get("ADMIN_PASSWORD")
+    password = os.environ.get("ADMIN_PASSWORD")
+    if not password:
+        return False
+    return request.headers.get("X-Admin-Password") == password
 
 conn = sqlite3.connect("bridge.db")
 conn.execute("""
