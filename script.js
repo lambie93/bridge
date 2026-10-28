@@ -522,7 +522,7 @@ function loadApprovedOpportunities() {
 
                 card.innerHTML =
                     '<div class="card-top-tags">' +
-                        '<span class="tag">' + opp.category + "</span>" +
+                        '<span class="tag ' + (opp.category || "").toLowerCase() + '">' + opp.category + "</span>" +
                         (opp.cost ? '<span class="detail-tag free-tag">' + opp.cost + "</span>" : "") +
                     "</div>" +
                     (opp.image
