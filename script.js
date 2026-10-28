@@ -444,6 +444,41 @@ function expandAges(values) {
     return individuals.concat(ranges);
 }
 
+// Grade group labels and the individual grades they contain.
+const GRADE_GROUPS = {
+    "high school": ["9th Grade", "10th Grade", "11th Grade", "12th Grade"],
+    "high school underclassman": ["9th Grade", "10th Grade"],
+    "high school upperclassman": ["11th Grade", "12th Grade"]
+};
+
+// Turn group labels like "High School" into individual grade pills too,
+// keeping the group pill last.
+function expandGrades(values) {
+    const individuals = [];
+    const groups = [];
+
+    (values || "")
+        .split(",")
+        .map(value => value.trim())
+        .filter(Boolean)
+        .forEach(value => {
+            const members = GRADE_GROUPS[value.toLowerCase()];
+
+            if (members) {
+                groups.push(value);
+                members.forEach(grade => {
+                    if (!individuals.includes(grade)) {
+                        individuals.push(grade);
+                    }
+                });
+            } else if (!individuals.includes(value)) {
+                individuals.push(value);
+            }
+        });
+
+    return individuals.concat(groups);
+}
+
 function makeTagRow(pills) {
     return pills ? '<div class="tag-row">' + pills + "</div>" : "";
 }
@@ -463,11 +498,12 @@ function loadApprovedOpportunities() {
                 card.className = "card";
 
                 const agesExpanded = expandAges(opp.eligible_ages);
+                const gradesExpanded = expandGrades(opp.eligible_grades);
 
                 card.dataset.category = opp.category || "";
                 card.dataset.cost = opp.cost || "";
                 card.dataset.location = opp.location || "";
-                card.dataset.grades = opp.eligible_grades || "";
+                card.dataset.grades = gradesExpanded.join(",");
                 card.dataset.ages = agesExpanded.join(",");
                 card.dataset.season = opp.season || "";
                 card.dataset.time = opp.time_of_year || "";
@@ -475,7 +511,7 @@ function loadApprovedOpportunities() {
                 const seasonTimePills =
                     makePills(opp.season, "season-tag") +
                     makePills(opp.time_of_year, "school-year-tag");
-                const gradePills = makePills(opp.eligible_grades, "grade-tag");
+                const gradePills = makePills(gradesExpanded.join(","), "grade-tag");
                 const agePills = makePills(agesExpanded.join(","), "age-tag");
 
                 let genderPills = "";
