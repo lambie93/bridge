@@ -1,10 +1,15 @@
 from flask import Flask
 from flask import request, jsonify
 from flask_cors import CORS
+import os
 import sqlite3
 
 app = Flask(__name__)
 CORS(app)
+
+
+def check_password():
+    return request.headers.get("X-Admin-Password") == os.environ.get("ADMIN_PASSWORD")
 
 conn = sqlite3.connect("bridge.db")
 conn.execute("""
@@ -65,6 +70,9 @@ opportunity_name, organization, official_website, category, eligible_grades, eli
 
 @app.route("/api/suggestions", methods=["GET"])
 def list_suggestions():
+    if not check_password():
+        return jsonify({"error": "Wrong password"}), 401
+
     db = sqlite3.connect("bridge.db")
     db.row_factory = sqlite3.Row
 
@@ -89,6 +97,9 @@ def list_opportunities():
 
 @app.route("/api/suggestions/<int:suggestion_id>/approve", methods=["POST"])
 def approve_suggestion(suggestion_id):
+    if not check_password():
+        return jsonify({"error": "Wrong password"}), 401
+
     db = sqlite3.connect("bridge.db")
     db.execute(
         "UPDATE suggestions SET status = 'approved' WHERE id = ?",
@@ -100,6 +111,9 @@ def approve_suggestion(suggestion_id):
 
 @app.route("/api/suggestions/<int:suggestion_id>/reject", methods=["POST"])
 def reject_suggestion(suggestion_id):
+    if not check_password():
+        return jsonify({"error": "Wrong password"}), 401
+
     db = sqlite3.connect("bridge.db")
     db.execute(
         "UPDATE suggestions SET status = 'rejected' WHERE id = ?",
@@ -108,6 +122,17 @@ def reject_suggestion(suggestion_id):
     db.commit()
     db.close()
     return jsonify({"message": "Rejected!"})
+
+@app.route("/api/suggestions/<int:suggestion_id>", methods=["DELETE"])
+def delete_suggestion(suggestion_id):
+    if not check_password():
+        return jsonify({"error": "Wrong password"}), 401
+
+    db = sqlite3.connect("bridge.db")
+    db.execute("DELETE FROM suggestions WHERE id = ?", (suggestion_id,))
+    db.commit()
+    db.close()
+    return jsonify({"message": "Deleted!"})
 
 if __name__ == "__main__":
     app.run(debug=True)

@@ -407,6 +407,19 @@ function suggestEndpointIsNotConfigured() {
     return suggestionEndpoint.includes("YOUR_FORM_ID");
 }
 
+function makePills(values, cssClass) {
+    return (values || "")
+        .split(",")
+        .map(value => value.trim())
+        .filter(Boolean)
+        .map(value => '<span class="detail-tag ' + cssClass + '">' + value + "</span>")
+        .join("");
+}
+
+function makeTagRow(pills) {
+    return pills ? '<div class="tag-row">' + pills + "</div>" : "";
+}
+
 function loadApprovedOpportunities() {
     const grid = document.getElementById("cardGrid");
 
@@ -429,27 +442,50 @@ function loadApprovedOpportunities() {
                 card.dataset.season = opp.season || "";
                 card.dataset.time = opp.time_of_year || "";
 
-                let genderPill = "";
+                const seasonTimePills =
+                    makePills(opp.season, "season-tag") +
+                    makePills(opp.time_of_year, "school-year-tag");
+                const gradePills = makePills(opp.eligible_grades, "grade-tag");
+                const agePills = makePills(opp.eligible_ages, "age-tag");
+
+                let genderPills = "";
                 if (opp.gender && opp.gender !== "Both") {
-                    genderPill = 
-                    '<span class="detail-tag">' + opp.gender + "</span>";
+                    genderPills = makePills(opp.gender, "");
                     card.dataset.gender = opp.gender;
                 }
 
                 card.innerHTML =
-                '<div class="card-top-tags">' +
-                '<span class="tag">' + opp.category + "</span>" + 
-                "</div>" +
-                "<h3>" + opp.opportunity_name + "</h3>" +
-                '<div class="opportunity-tags"><div class="tag-row">' +
-                        '<span class="detail-tag grade-tag">' + opp.eligible_grades + "</span>" +
-                        '<span class="detail-tag age-tag">' + opp.eligible_ages + "</span>" +
-                        '<span class="detail-tag">' + opp.cost + "</span>" +
-                        '<span class="detail-tag">' + opp.location + "</span>" +
-                        genderPill +
-                    "</div></div>" +
+                    '<div class="card-top-tags">' +
+                        '<span class="tag">' + opp.category + "</span>" +
+                        (opp.cost ? '<span class="detail-tag free-tag">' + opp.cost + "</span>" : "") +
+                    "</div>" +
+                    "<h3>" + opp.opportunity_name + "</h3>" +
+                    '<div class="opportunity-details">' +
+                        '<div class="location-info">' +
+                            '<svg class="location-pin" viewBox="0 0 24 24" fill="none" ' +
+                                'stroke="currentColor" stroke-width="1.8" stroke-linecap="round" ' +
+                                'stroke-linejoin="round" aria-hidden="true">' +
+                                '<path d="M20 10c0 5-8 12-8 12S4 15 4 10a8 8 0 1 1 16 0Z"/>' +
+                                '<circle cx="12" cy="10" r="2.5"/>' +
+                            "</svg>" +
+                            "<span>" + (opp.location || "") + "</span>" +
+                        "</div>" +
+                        '<div class="opportunity-tags">' +
+                            makeTagRow(seasonTimePills) +
+                            makeTagRow(gradePills) +
+                            makeTagRow(agePills) +
+                            makeTagRow(genderPills) +
+                        "</div>" +
+                    "</div>" +
                     '<a href="' + opp.official_website + '" target="_blank" ' +
                         'rel="noopener noreferrer" class="website-link">Website ↗</a>';
+
+                card.querySelectorAll(".tag, .detail-tag").forEach(tag => {
+                    tag.title = "Click to filter opportunities";
+                    tag.addEventListener("click", () => {
+                        applyPillFilter(tag);
+                    });
+                });
 
                 grid.appendChild(card);
             });

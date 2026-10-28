@@ -10,9 +10,21 @@
     <h1>Pending Suggestions</h1>
     <div id="suggestionList"></div>
 
+    <h1>Approved Opportunities</h1>
+    <div id="approvedList"></div>
+
     <script>
-        fetch("https://bridge-okke.onrender.com/api/suggestions/")
-            .then(response => response.json())
+        const password = prompt("Enter the admin password:");
+        const authHeaders = { "X-Admin-Password": password };
+        const API = "https://bridge-okke.onrender.com";
+
+        fetch(API + "/api/suggestions/", { headers: authHeaders })
+            .then(response => {
+                if (response.status === 401) {
+                    throw new Error("Wrong password");
+                }
+                return response.json();
+            })
             .then(suggestions => {
                 const list = document.getElementById("suggestionList");
 
@@ -28,21 +40,51 @@
                     const approveBtn = document.createElement("button");
                     approveBtn.textContent = "Approve";
                     approveBtn.addEventListener("click", () => {
-                        fetch("https://bridge-okke.onrender.com/api/suggestions/" + suggestion.id + "/approve",
-                            { method: "POST"})
+                        fetch(API + "/api/suggestions/" + suggestion.id + "/approve",
+                            { method: "POST", headers: authHeaders })
                             .then(() => card.remove());
                     });
 
                     const rejectBtn = document.createElement("button");
                     rejectBtn.textContent = "Reject";
                     rejectBtn.addEventListener("click", ()=> {
-                        fetch("https://bridge-okke.onrender.com/api/suggestions/" + suggestion.id + "/reject",
-                            { method: "POST"})
+                        fetch(API + "/api/suggestions/" + suggestion.id + "/reject",
+                            { method: "POST", headers: authHeaders })
                             .then(() => card.remove());
                     });
 
                     card.appendChild(approveBtn);
                     card.appendChild(rejectBtn);
+                });
+            })
+            .catch(error => {
+                document.getElementById("suggestionList").textContent =
+                    "Could not load suggestions: " + error.message;
+            });
+
+        fetch(API + "/api/opportunities")
+            .then(response => response.json())
+            .then(opportunities => {
+                const list = document.getElementById("approvedList");
+
+                opportunities.forEach(opp => {
+                    const card = document.createElement("div");
+                    card.innerHTML =
+                        "<h3>" + opp.opportunity_name + "</h3>" +
+                        "<p>" + opp.organization + " — " +
+                        opp.category + "</p>" +
+                        '<a href="' + opp.official_website + '">Website</a>';
+                    list.appendChild(card);
+
+                    const removeBtn = document.createElement("button");
+                    removeBtn.textContent = "Remove";
+                    removeBtn.addEventListener("click", () => {
+                        fetch(API + "/api/suggestions/" + opp.id,
+                            { method: "DELETE", headers: authHeaders })
+                            .then(() => card.remove());
+                    });
+
+                    card.appendChild(removeBtn);
                 });
             });
     </script>
