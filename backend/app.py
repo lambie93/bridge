@@ -71,7 +71,7 @@ opportunity_name, organization, official_website, category, eligible_grades, eli
 
     return jsonify({"message": "Suggestion received!"}), 201
 
-@app.route("/api/suggestions", methods=["GET"])
+@app.route("/api/suggestions", methods=["GET"], strict_slashes=False)
 def list_suggestions():
     if not check_password():
         return jsonify({"error": "Wrong password"}), 401
