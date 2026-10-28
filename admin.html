@@ -57,6 +57,21 @@
 
         let authHeaders = {};
 
+        // Dropdown choices, matching the suggestion form on the homepage.
+        const FIELD_OPTIONS = {
+            category: ["Scholarship", "Internship", "Program", "Competition",
+                "Volunteer", "Research", "Hackathon"],
+            eligible_grades: ["9th Grade", "10th Grade", "11th Grade", "12th Grade",
+                "High School Underclassman", "High School Upperclassman",
+                "High School", "Incoming College Freshman", "All Grades"],
+            eligible_ages: ["13", "14", "15", "16", "17", "18", "13-18", "All Ages"],
+            gender: ["Both", "Female", "Male"],
+            cost: ["Free", "Paid", "Costs Associated"],
+            location: ["In-Person", "Virtual", "Hybrid"],
+            time_of_year: ["Summer", "School Year"],
+            season: ["Winter", "Spring", "Summer", "Fall"]
+        };
+
         const passwordForm = document.getElementById("passwordForm");
         const passwordError = document.getElementById("passwordError");
         const adminContent = document.getElementById("adminContent");
@@ -113,10 +128,35 @@
                     const wrapper = document.createElement("label");
                     wrapper.textContent = label;
 
-                    const input = document.createElement("input");
-                    input.name = field;
-                    input.value = suggestion[field] || "";
+                    const current = suggestion[field] || "";
+                    let input;
 
+                    if (FIELD_OPTIONS[field]) {
+                        input = document.createElement("select");
+
+                        const options = FIELD_OPTIONS[field].slice();
+                        // Keep unusual existing values selectable.
+                        if (current && !options.includes(current)) {
+                            options.unshift(current);
+                        }
+
+                        options.forEach(value => {
+                            const option = document.createElement("option");
+                            option.value = value;
+                            option.textContent = value;
+                            input.appendChild(option);
+                        });
+
+                        input.value = current;
+                    } else {
+                        input = document.createElement("input");
+                        if (field === "deadline") {
+                            input.type = "date";
+                        }
+                        input.value = current;
+                    }
+
+                    input.name = field;
                     wrapper.appendChild(input);
                     grid.appendChild(wrapper);
                 });
@@ -169,7 +209,7 @@
 
                 const saveBtn = makeButton("Save Changes", "btn", () => {
                     const updated = {};
-                    grid.querySelectorAll("input").forEach(input => {
+                    grid.querySelectorAll("input, select").forEach(input => {
                         updated[input.name] = input.value;
                     });
                     updated.image = imageData;

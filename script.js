@@ -416,6 +416,34 @@ function makePills(values, cssClass) {
         .join("");
 }
 
+// Turn ranges like "13-18" into individual ages too, so a card lists
+// 13, 14, 15, 16, 17, 18 AND the range itself (range pill goes last).
+function expandAges(values) {
+    const individuals = [];
+    const ranges = [];
+
+    (values || "")
+        .split(",")
+        .map(value => value.trim())
+        .filter(Boolean)
+        .forEach(value => {
+            const match = value.match(/^(\d{1,2})\s*[-–]\s*(\d{1,2})$/);
+
+            if (match) {
+                ranges.push(value);
+                for (let age = Number(match[1]); age <= Number(match[2]); age++) {
+                    if (!individuals.includes(String(age))) {
+                        individuals.push(String(age));
+                    }
+                }
+            } else if (!individuals.includes(value)) {
+                individuals.push(value);
+            }
+        });
+
+    return individuals.concat(ranges);
+}
+
 function makeTagRow(pills) {
     return pills ? '<div class="tag-row">' + pills + "</div>" : "";
 }
@@ -434,11 +462,13 @@ function loadApprovedOpportunities() {
                 const card = document.createElement("article");
                 card.className = "card";
 
+                const agesExpanded = expandAges(opp.eligible_ages);
+
                 card.dataset.category = opp.category || "";
                 card.dataset.cost = opp.cost || "";
                 card.dataset.location = opp.location || "";
                 card.dataset.grades = opp.eligible_grades || "";
-                card.dataset.ages = opp.eligible_ages || "";
+                card.dataset.ages = agesExpanded.join(",");
                 card.dataset.season = opp.season || "";
                 card.dataset.time = opp.time_of_year || "";
 
@@ -446,7 +476,7 @@ function loadApprovedOpportunities() {
                     makePills(opp.season, "season-tag") +
                     makePills(opp.time_of_year, "school-year-tag");
                 const gradePills = makePills(opp.eligible_grades, "grade-tag");
-                const agePills = makePills(opp.eligible_ages, "age-tag");
+                const agePills = makePills(agesExpanded.join(","), "age-tag");
 
                 let genderPills = "";
                 if (opp.gender && opp.gender !== "Both") {
