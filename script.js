@@ -459,6 +459,9 @@ function loadApprovedOpportunities() {
                         '<span class="tag">' + opp.category + "</span>" +
                         (opp.cost ? '<span class="detail-tag free-tag">' + opp.cost + "</span>" : "") +
                     "</div>" +
+                    (opp.image
+                        ? '<img src="' + opp.image + '" alt="' + opp.opportunity_name + ' logo">'
+                        : "") +
                     "<h3>" + opp.opportunity_name + "</h3>" +
                     '<div class="opportunity-details">' +
                         '<div class="location-info">' +

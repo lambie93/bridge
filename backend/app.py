@@ -35,6 +35,13 @@ conn.execute("""
     """)
 
 conn.commit()
+
+# Add the image column to databases created before it existed.
+columns = [row[1] for row in conn.execute("PRAGMA table_info(suggestions)")]
+if "image" not in columns:
+    conn.execute("ALTER TABLE suggestions ADD COLUMN image TEXT")
+    conn.commit()
+
 conn.close()
 
 @app.route("/")
@@ -140,7 +147,7 @@ def delete_suggestion(suggestion_id):
 EDITABLE_FIELDS = [
     "opportunity_name", "organization", "official_website", "category",
     "eligible_grades", "eligible_ages", "gender", "cost", "location",
-    "time_of_year", "season", "deadline"
+    "time_of_year", "season", "deadline", "image"
 ]
 
 @app.route("/api/suggestions/<int:suggestion_id>", methods=["PUT"])
