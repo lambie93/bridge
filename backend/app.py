@@ -137,5 +137,34 @@ def delete_suggestion(suggestion_id):
     db.close()
     return jsonify({"message": "Deleted!"})
 
+EDITABLE_FIELDS = [
+    "opportunity_name", "organization", "official_website", "category",
+    "eligible_grades", "eligible_ages", "gender", "cost", "location",
+    "time_of_year", "season", "deadline"
+]
+
+@app.route("/api/suggestions/<int:suggestion_id>", methods=["PUT"])
+def update_suggestion(suggestion_id):
+    if not check_password():
+        return jsonify({"error": "Wrong password"}), 401
+
+    data = request.get_json(silent=True) or {}
+    fields = [field for field in EDITABLE_FIELDS if field in data]
+
+    if not fields:
+        return jsonify({"error": "Nothing to update"}), 400
+
+    assignments = ", ".join(field + " = ?" for field in fields)
+    values = [data[field] for field in fields]
+
+    db = sqlite3.connect("bridge.db")
+    db.execute(
+        "UPDATE suggestions SET " + assignments + " WHERE id = ?",
+        (*values, suggestion_id)
+    )
+    db.commit()
+    db.close()
+    return jsonify({"message": "Updated!"})
+
 if __name__ == "__main__":
     app.run(debug=True)

@@ -3,90 +3,230 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Bridge | Review Suggestions</title>
+    <title>Bridge | Admin</title>
+
     <link rel="stylesheet" href="opportunities.css">
+    <link rel="stylesheet" href="admin.css">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Roboto+Condensed:wght@400;500;600;700&display=swap"
+        rel="stylesheet"
+    >
 </head>
 <body>
-    <h1>Pending Suggestions</h1>
-    <div id="suggestionList"></div>
+    <main class="admin-page">
+        <h1>Bridge Admin</h1>
 
-    <h1>Approved Opportunities</h1>
-    <div id="approvedList"></div>
+        <form id="passwordForm" class="password-card">
+            <label>
+                Admin password
+                <input type="password" id="passwordInput" required>
+            </label>
+            <button type="submit" class="btn btn-primary">Log in</button>
+            <p id="passwordError" class="form-error"></p>
+        </form>
+
+        <div id="adminContent" hidden>
+            <h2>Pending Suggestions</h2>
+            <div id="suggestionList"></div>
+
+            <h2>Approved Opportunities</h2>
+            <div id="approvedList"></div>
+        </div>
+    </main>
 
     <script>
-        const password = prompt("Enter the admin password:");
-        const authHeaders = { "X-Admin-Password": password };
         const API = "https://bridge-okke.onrender.com";
 
-        fetch(API + "/api/suggestions/", { headers: authHeaders })
-            .then(response => {
-                if (response.status === 401) {
-                    throw new Error("Wrong password");
-                }
-                return response.json();
-            })
-            .then(suggestions => {
-                const list = document.getElementById("suggestionList");
+        const EDITABLE_FIELDS = [
+            ["opportunity_name", "Opportunity Name"],
+            ["organization", "Organization"],
+            ["official_website", "Website URL"],
+            ["category", "Category"],
+            ["eligible_grades", "Eligible Grades"],
+            ["eligible_ages", "Eligible Ages"],
+            ["gender", "Gender"],
+            ["cost", "Cost"],
+            ["location", "Location"],
+            ["time_of_year", "Time of Year"],
+            ["season", "Season"],
+            ["deadline", "Deadline"]
+        ];
 
-                suggestions.forEach(suggestion => {
-                    const card = document.createElement("div");
-                    card.innerHTML =
-                        "<h3>" + suggestion.opportunity_name + "</h3>" +
-                        "<p>" + suggestion.organization + " — " +
-                        suggestion.category + "</p>" +
-                        '<a href="' + suggestion.official_website + '">Website</a>';
-                    list.appendChild(card);
+        let authHeaders = {};
 
-                    const approveBtn = document.createElement("button");
-                    approveBtn.textContent = "Approve";
-                    approveBtn.addEventListener("click", () => {
-                        fetch(API + "/api/suggestions/" + suggestion.id + "/approve",
-                            { method: "POST", headers: authHeaders })
-                            .then(() => card.remove());
-                    });
+        const passwordForm = document.getElementById("passwordForm");
+        const passwordError = document.getElementById("passwordError");
+        const adminContent = document.getElementById("adminContent");
 
-                    const rejectBtn = document.createElement("button");
-                    rejectBtn.textContent = "Reject";
-                    rejectBtn.addEventListener("click", ()=> {
-                        fetch(API + "/api/suggestions/" + suggestion.id + "/reject",
-                            { method: "POST", headers: authHeaders })
-                            .then(() => card.remove());
-                    });
+        passwordForm.addEventListener("submit", event => {
+            event.preventDefault();
 
-                    card.appendChild(approveBtn);
-                    card.appendChild(rejectBtn);
+            authHeaders = {
+                "X-Admin-Password": document.getElementById("passwordInput").value
+            };
+
+            fetch(API + "/api/suggestions/", { headers: authHeaders })
+                .then(response => {
+                    if (response.status === 401) {
+                        throw new Error("Wrong password");
+                    }
+                    return response.json();
+                })
+                .then(suggestions => {
+                    passwordForm.hidden = true;
+                    adminContent.hidden = false;
+                    renderSuggestions(suggestions);
+                    loadApproved();
+                })
+                .catch(error => {
+                    passwordError.textContent = error.message === "Wrong password"
+                        ? "Wrong password. Try again."
+                        : "Could not reach the server. The backend may be waking up — try again in a minute.";
                 });
-            })
-            .catch(error => {
-                document.getElementById("suggestionList").textContent =
-                    "Could not load suggestions: " + error.message;
-            });
+        });
 
-        fetch(API + "/api/opportunities")
-            .then(response => response.json())
-            .then(opportunities => {
-                const list = document.getElementById("approvedList");
+        // Build one editable card per pending suggestion.
+        function renderSuggestions(suggestions) {
+            const list = document.getElementById("suggestionList");
+            list.innerHTML = "";
 
-                opportunities.forEach(opp => {
-                    const card = document.createElement("div");
-                    card.innerHTML =
-                        "<h3>" + opp.opportunity_name + "</h3>" +
-                        "<p>" + opp.organization + " — " +
-                        opp.category + "</p>" +
-                        '<a href="' + opp.official_website + '">Website</a>';
-                    list.appendChild(card);
+            if (suggestions.length === 0) {
+                list.innerHTML = '<p class="empty-message">No pending suggestions.</p>';
+                return;
+            }
 
-                    const removeBtn = document.createElement("button");
-                    removeBtn.textContent = "Remove";
-                    removeBtn.addEventListener("click", () => {
-                        fetch(API + "/api/suggestions/" + opp.id,
-                            { method: "DELETE", headers: authHeaders })
-                            .then(() => card.remove());
+            suggestions.forEach(suggestion => {
+                const card = document.createElement("div");
+                card.className = "admin-card";
+
+                const title = document.createElement("h3");
+                title.textContent = suggestion.opportunity_name;
+                card.appendChild(title);
+
+                const grid = document.createElement("div");
+                grid.className = "edit-grid";
+
+                EDITABLE_FIELDS.forEach(([field, label]) => {
+                    const wrapper = document.createElement("label");
+                    wrapper.textContent = label;
+
+                    const input = document.createElement("input");
+                    input.name = field;
+                    input.value = suggestion[field] || "";
+
+                    wrapper.appendChild(input);
+                    grid.appendChild(wrapper);
+                });
+
+                card.appendChild(grid);
+
+                const actions = document.createElement("div");
+                actions.className = "card-actions";
+
+                const status = document.createElement("p");
+                status.className = "card-status";
+
+                const saveBtn = makeButton("Save Changes", "btn", () => {
+                    const updated = {};
+                    grid.querySelectorAll("input").forEach(input => {
+                        updated[input.name] = input.value;
                     });
 
-                    card.appendChild(removeBtn);
+                    fetch(API + "/api/suggestions/" + suggestion.id, {
+                        method: "PUT",
+                        headers: { ...authHeaders, "Content-Type": "application/json" },
+                        body: JSON.stringify(updated)
+                    }).then(() => {
+                        status.textContent = "Saved ✓";
+                    });
                 });
+
+                const approveBtn = makeButton("Approve", "btn btn-primary", () => {
+                    saveBtn.click();
+                    fetch(API + "/api/suggestions/" + suggestion.id + "/approve",
+                        { method: "POST", headers: authHeaders })
+                        .then(() => {
+                            card.remove();
+                            loadApproved();
+                        });
+                });
+
+                const rejectBtn = makeButton("Reject", "btn btn-danger", () => {
+                    fetch(API + "/api/suggestions/" + suggestion.id + "/reject",
+                        { method: "POST", headers: authHeaders })
+                        .then(() => card.remove());
+                });
+
+                actions.appendChild(saveBtn);
+                actions.appendChild(approveBtn);
+                actions.appendChild(rejectBtn);
+                card.appendChild(actions);
+                card.appendChild(status);
+                list.appendChild(card);
             });
+        }
+
+        // List approved opportunities with a remove button.
+        function loadApproved() {
+            fetch(API + "/api/opportunities")
+                .then(response => response.json())
+                .then(opportunities => {
+                    const list = document.getElementById("approvedList");
+                    list.innerHTML = "";
+
+                    if (opportunities.length === 0) {
+                        list.innerHTML =
+                            '<p class="empty-message">No approved opportunities yet.</p>';
+                        return;
+                    }
+
+                    opportunities.forEach(opp => {
+                        const card = document.createElement("div");
+                        card.className = "admin-card";
+
+                        const title = document.createElement("h3");
+                        title.textContent = opp.opportunity_name;
+
+                        const details = document.createElement("p");
+                        details.textContent =
+                            (opp.organization || "") + " — " + (opp.category || "");
+
+                        const link = document.createElement("a");
+                        link.href = opp.official_website;
+                        link.textContent = "Website";
+                        link.target = "_blank";
+                        link.rel = "noopener noreferrer";
+
+                        const actions = document.createElement("div");
+                        actions.className = "card-actions";
+
+                        const removeBtn = makeButton("Remove", "btn btn-danger", () => {
+                            fetch(API + "/api/suggestions/" + opp.id,
+                                { method: "DELETE", headers: authHeaders })
+                                .then(() => card.remove());
+                        });
+
+                        actions.appendChild(removeBtn);
+                        card.appendChild(title);
+                        card.appendChild(details);
+                        card.appendChild(link);
+                        card.appendChild(actions);
+                        list.appendChild(card);
+                    });
+                });
+        }
+
+        function makeButton(text, className, onClick) {
+            const button = document.createElement("button");
+            button.type = "button";
+            button.textContent = text;
+            button.className = className;
+            button.addEventListener("click", onClick);
+            return button;
+        }
     </script>
 </body>
 </html>

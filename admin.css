@@ -1,0 +1,160 @@
+/* ================================
+   ADMIN PAGE
+   Uses the color variables from opportunities.css
+================================ */
+
+.admin-page {
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 32px 24px 64px;
+}
+
+.admin-page h1 {
+    color: var(--blue);
+}
+
+.admin-page h2 {
+    margin-top: 40px;
+    border-bottom: 2px solid var(--light-blue);
+    padding-bottom: 8px;
+}
+
+/* Password gate */
+
+.password-card {
+    max-width: 400px;
+    margin: 80px auto 0;
+    padding: 32px;
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    background: var(--pale-blue);
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.password-card label {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    font-weight: 600;
+}
+
+.form-error {
+    margin: 0;
+    color: var(--red-text);
+    background: var(--red-bg);
+    padding: 8px 12px;
+    border-radius: 8px;
+}
+
+.form-error:empty {
+    display: none;
+}
+
+/* Inputs */
+
+.admin-page input,
+.admin-page select {
+    padding: 10px 12px;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    background: #fff;
+    color: var(--text);
+}
+
+.admin-page input:focus,
+.admin-page select:focus {
+    outline: 2px solid var(--light-blue);
+    outline-offset: 1px;
+}
+
+/* Buttons */
+
+.btn {
+    padding: 10px 18px;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    background: #fff;
+    color: var(--text);
+    cursor: pointer;
+    font-weight: 600;
+}
+
+.btn:hover {
+    background: var(--pale-blue);
+}
+
+.btn-primary {
+    background: var(--blue);
+    border-color: var(--blue);
+    color: #fff;
+}
+
+.btn-primary:hover {
+    background: var(--light-blue);
+    border-color: var(--light-blue);
+    color: var(--text);
+}
+
+.btn-danger {
+    color: var(--red-text);
+}
+
+.btn-danger:hover {
+    background: var(--red-bg);
+}
+
+/* Suggestion cards */
+
+.admin-card {
+    margin: 20px 0;
+    padding: 24px;
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    background: #fff;
+}
+
+.admin-card h3 {
+    margin-top: 0;
+}
+
+.admin-card a {
+    color: var(--blue);
+}
+
+.edit-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+    gap: 16px;
+    margin: 16px 0;
+}
+
+.edit-grid label {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: var(--muted);
+}
+
+.card-actions {
+    display: flex;
+    gap: 12px;
+    flex-wrap: wrap;
+}
+
+.card-status {
+    margin: 12px 0 0;
+    font-weight: 600;
+    color: var(--blue);
+}
+
+.card-status:empty {
+    display: none;
+}
+
+.empty-message {
+    color: var(--muted);
+}
