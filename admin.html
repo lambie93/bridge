@@ -84,7 +84,6 @@
         const passwordError = document.getElementById("passwordError");
         const adminContent = document.getElementById("adminContent");
 
-        // Admin login
         passwordForm.addEventListener("submit", event => {
             event.preventDefault();
 
@@ -110,10 +109,8 @@
                     return response.json();
                 })
                 .then(suggestions => {
-                    // Hide password form after successful login
                     passwordForm.style.display = "none";
 
-                    // Show admin dashboard
                     adminContent.hidden = false;
                     adminContent.style.display = "block";
 
@@ -128,7 +125,6 @@
                 });
         });
 
-        // Build one editable card per pending suggestion.
         function renderSuggestions(suggestions) {
             const list = document.getElementById("suggestionList");
             list.innerHTML = "";
@@ -191,7 +187,6 @@
 
                 card.appendChild(grid);
 
-                // Logo upload and preview
                 let imageData = suggestion.image || "";
 
                 const logoSection = document.createElement("div");
@@ -239,7 +234,6 @@
                 const status = document.createElement("p");
                 status.className = "card-status";
 
-                // Save changes
                 const saveBtn = makeButton(
                     "Save Changes",
                     "btn",
@@ -274,7 +268,6 @@
                     }
                 );
 
-                // Approve suggestion
                 const approveBtn = makeButton(
                     "Approve",
                     "btn btn-primary",
@@ -324,7 +317,6 @@
                     }
                 );
 
-                // Reject suggestion
                 const rejectBtn = makeButton(
                     "Reject",
                     "btn btn-danger",
@@ -361,7 +353,6 @@
             });
         }
 
-        // Load approved opportunities
         function loadApproved() {
             fetch(API + "/api/opportunities")
                 .then(response => {
@@ -447,7 +438,6 @@
                 });
         }
 
-        // Resize uploaded images
         function resizeImage(file, done) {
             const reader = new FileReader();
 
@@ -484,7 +474,6 @@
             reader.readAsDataURL(file);
         }
 
-        // Create buttons
         function makeButton(text, className, onClick) {
             const button = document.createElement("button");
 

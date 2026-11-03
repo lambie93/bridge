@@ -472,7 +472,7 @@ input:focus-visible {
     color: #805719;
     border: 1px solid #EED9AD;
 }
-/* Clickable pills */
+
 .card .tag,
 .card .detail-tag {
     cursor: pointer;

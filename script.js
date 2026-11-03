@@ -5,7 +5,6 @@ document.addEventListener("DOMContentLoaded", () => {
     const searchBar = document.getElementById("searchBar");
     const resetButton = document.getElementById("resetFilters");
 
-    // Category buttons.
     document.querySelectorAll(".filter-buttons button").forEach(button => {
         button.addEventListener("click", () => {
             currentCategory = button.dataset.category || "all";
@@ -18,10 +17,8 @@ document.addEventListener("DOMContentLoaded", () => {
         });
     });
 
-    // Search as the user types.
     searchBar?.addEventListener("input", filterAll);
 
-    // Sidebar checkboxes and age selector.
     document.querySelectorAll(
         '.filter-sidebar input[type="checkbox"], #ageSelect'
     ).forEach(input => {
@@ -43,7 +40,6 @@ document.addEventListener("DOMContentLoaded", () => {
     filterAll();
 });
 
-// Normalize text for comparisons.
 function normalize(value) {
     return (value || "")
         .toLowerCase()
@@ -51,7 +47,6 @@ function normalize(value) {
         .trim();
 }
 
-// Read comma-separated values from a card's data attributes.
 function getCardValues(card, attribute) {
     return (card.dataset[attribute] || "")
         .split(",")
@@ -59,7 +54,6 @@ function getCardValues(card, attribute) {
         .filter(Boolean);
 }
 
-// Get selected values for one filter group.
 function getSelectedValues(filterName) {
     return Array.from(
         document.querySelectorAll(
@@ -68,8 +62,6 @@ function getSelectedValues(filterName) {
     ).map(input => normalize(input.value));
 }
 
-// Check whether a card matches a filter group.
-// Multiple choices in one group use OR logic.
 function matchesGroup(card, filterName, attribute) {
     const selected = getSelectedValues(filterName);
 
@@ -79,7 +71,6 @@ function matchesGroup(card, filterName, attribute) {
 
     const cardValues = getCardValues(card, attribute);
 
-    // Cards without eligibility information cannot match an active filter.
     if (cardValues.length === 0) {
         return false;
     }
@@ -106,7 +97,6 @@ function matchesGroup(card, filterName, attribute) {
     });
 }
 
-// Match the selected age against each card's eligibility metadata.
 function matchesAge(card) {
     const ageSelect = document.getElementById("ageSelect");
     const selectedAge = ageSelect?.value || "";
@@ -124,7 +114,6 @@ function matchesAge(card) {
     return ages.includes("all ages") || ages.includes(selectedAge);
 }
 
-// Filter every card using all active criteria.
 function filterAll() {
     const cards = document.querySelectorAll(".card");
     const searchText = normalize(
@@ -165,7 +154,6 @@ function filterAll() {
     });
 }
 
-// Clicking a pill on a card applies the corresponding filter.
 function applyPillFilter(pill) {
     const label = normalize(pill.textContent);
 
@@ -181,7 +169,6 @@ function applyPillFilter(pill) {
         "hackathon": "Hackathon"
     };
 
-    // Clicking a category tag selects its category.
     if (categoryTag && categoryMap[label]) {
         resetFilters();
         currentCategory = categoryMap[label];
@@ -221,14 +208,11 @@ function applyPillFilter(pill) {
         "male-identifying students": ["gender", "Male-Identifying Students"]
     };
 
-    // Clear previous filters before applying the clicked pill.
     resetFilters();
 
-    // The age-range tag represents the listed teen age range.
     if (label === "13–18" || label === "13-18") {
         document.getElementById("ageSelect").value = "13";
 
-        // Show cards that accept at least one age from 13 through 18.
         document.querySelectorAll(".card").forEach(card => {
             const ages = getCardValues(card, "ages");
             card.dataset.pillAgeRange = String(
@@ -272,7 +256,6 @@ function applyPillFilter(pill) {
     filterAll();
 }
 
-// Reset search, category, age, and checkboxes.
 function resetFilters() {
     document.getElementById("searchBar").value = "";
     document.getElementById("ageSelect").value = "";
@@ -299,10 +282,6 @@ function resetFilters() {
     filterAll();
 }
 
-/* ================================
-   SUGGEST AN OPPORTUNITY
-================================ */
-
 const suggestDialog = document.getElementById("suggestOpportunityDialog");
 const suggestBtn = document.getElementById("suggestOpportunityBtn");
 const closeSuggestBtn = document.getElementById("closeSuggestDialog");
@@ -313,16 +292,13 @@ const suggestSubmitBtn = suggestForm.querySelector(
     'button[type="submit"]'
 );
 
-// Replace this with your Formspree form endpoint.
 const suggestionEndpoint = "https://bridge-okke.onrender.com/api/suggestions";
 
-// Open the form.
 suggestBtn.addEventListener("click", () => {
     suggestStatus.textContent = "";
     suggestDialog.showModal();
 });
 
-// Close the form.
 function closeSuggestionDialog() {
     suggestDialog.close();
 }
@@ -330,14 +306,12 @@ function closeSuggestionDialog() {
 closeSuggestBtn.addEventListener("click", closeSuggestionDialog);
 cancelSuggestBtn.addEventListener("click", closeSuggestionDialog);
 
-// Close when clicking the backdrop.
 suggestDialog.addEventListener("click", (event) => {
     if (event.target === suggestDialog) {
         closeSuggestionDialog();
     }
 });
 
-// Submit the suggestion for review.
 suggestForm.addEventListener("submit", async (event) => {
     event.preventDefault();
 
@@ -380,7 +354,6 @@ suggestForm.addEventListener("submit", async (event) => {
 
         suggestSubmitBtn.textContent = "Submitted ✓";
 
-        // Let the student read the confirmation before closing.
         window.setTimeout(() => {
             suggestDialog.close();
 
@@ -416,8 +389,6 @@ function makePills(values, cssClass) {
         .join("");
 }
 
-// Turn ranges like "13-18" into individual ages too, so a card lists
-// 13, 14, 15, 16, 17, 18 AND the range itself (range pill goes last).
 function expandAges(values) {
     const individuals = [];
     const ranges = [];
@@ -444,15 +415,12 @@ function expandAges(values) {
     return individuals.concat(ranges);
 }
 
-// Grade group labels and the individual grades they contain.
 const GRADE_GROUPS = {
     "high school": ["9th Grade", "10th Grade", "11th Grade", "12th Grade"],
     "high school underclassman": ["9th Grade", "10th Grade"],
     "high school upperclassman": ["11th Grade", "12th Grade"]
 };
 
-// Turn group labels like "High School" into individual grade pills too,
-// keeping the group pill last.
 function expandGrades(values) {
     const individuals = [];
     const groups = [];
@@ -559,7 +527,7 @@ function loadApprovedOpportunities() {
                 grid.appendChild(card);
             });
 
-            filterAll();   // re-run filters so the new cards obey them
+            filterAll();
         });
 }
 
