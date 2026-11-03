@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="en-US">
 <head>
@@ -15,16 +16,18 @@
         rel="stylesheet"
     >
 </head>
+
 <body>
     <main class="admin-page">
         <h1>Bridge Admin</h1>
 
         <form id="passwordForm" class="password-card">
             <label>
-                Admin password
+                Admin Password
                 <input type="password" id="passwordInput" required>
             </label>
-            <button type="submit" class="btn btn-primary">Log in</button>
+
+            <button type="submit" class="btn btn-primary">Log In</button>
             <p id="passwordError" class="form-error"></p>
         </form>
 
@@ -57,14 +60,19 @@
 
         let authHeaders = {};
 
-        // Dropdown choices, matching the suggestion form on the homepage.
         const FIELD_OPTIONS = {
-            category: ["Scholarship", "Internship", "Program", "Competition",
-                "Volunteer", "Research", "Hackathon"],
-            eligible_grades: ["9th Grade", "10th Grade", "11th Grade", "12th Grade",
+            category: [
+                "Scholarship", "Internship", "Program",
+                "Competition", "Volunteer", "Research", "Hackathon"
+            ],
+            eligible_grades: [
+                "9th Grade", "10th Grade", "11th Grade", "12th Grade",
                 "High School Underclassman", "High School Upperclassman",
-                "High School", "Incoming College Freshman", "All Grades"],
-            eligible_ages: ["13", "14", "15", "16", "17", "18", "13-18", "All Ages"],
+                "High School", "Incoming College Freshman", "All Grades"
+            ],
+            eligible_ages: [
+                "13", "14", "15", "16", "17", "18", "13-18", "All Ages"
+            ],
             gender: ["Both", "Female", "Male"],
             cost: ["Free", "Paid", "Costs Associated"],
             location: ["In-Person", "Virtual", "Hybrid"],
@@ -76,30 +84,47 @@
         const passwordError = document.getElementById("passwordError");
         const adminContent = document.getElementById("adminContent");
 
+        // Admin login
         passwordForm.addEventListener("submit", event => {
             event.preventDefault();
 
             authHeaders = {
-                "X-Admin-Password": document.getElementById("passwordInput").value
+                "X-Admin-Password":
+                    document.getElementById("passwordInput").value
             };
 
-            fetch(API + "/api/suggestions", { headers: authHeaders })
+            passwordError.textContent = "";
+
+            fetch(API + "/api/suggestions", {
+                headers: authHeaders
+            })
                 .then(response => {
                     if (response.status === 401) {
                         throw new Error("Wrong password");
                     }
+
+                    if (!response.ok) {
+                        throw new Error("Server error");
+                    }
+
                     return response.json();
                 })
                 .then(suggestions => {
-                    passwordForm.hidden = true;
+                    // Hide password form after successful login
+                    passwordForm.style.display = "none";
+
+                    // Show admin dashboard
                     adminContent.hidden = false;
+                    adminContent.style.display = "block";
+
                     renderSuggestions(suggestions);
                     loadApproved();
                 })
                 .catch(error => {
-                    passwordError.textContent = error.message === "Wrong password"
-                        ? "Wrong password. Try again."
-                        : "Could not reach the server. The backend may be waking up — try again in a minute.";
+                    passwordError.textContent =
+                        error.message === "Wrong password"
+                            ? "Wrong password. Try again."
+                            : "Could not reach the server. The backend may be waking up — try again in a minute.";
                 });
         });
 
@@ -109,7 +134,8 @@
             list.innerHTML = "";
 
             if (suggestions.length === 0) {
-                list.innerHTML = '<p class="empty-message">No pending suggestions.</p>';
+                list.innerHTML =
+                    '<p class="empty-message">No pending suggestions.</p>';
                 return;
             }
 
@@ -135,7 +161,7 @@
                         input = document.createElement("select");
 
                         const options = FIELD_OPTIONS[field].slice();
-                        // Keep unusual existing values selectable.
+
                         if (current && !options.includes(current)) {
                             options.unshift(current);
                         }
@@ -150,9 +176,11 @@
                         input.value = current;
                     } else {
                         input = document.createElement("input");
+
                         if (field === "deadline") {
                             input.type = "date";
                         }
+
                         input.value = current;
                     }
 
@@ -163,7 +191,7 @@
 
                 card.appendChild(grid);
 
-                // Logo upload: preview + file picker.
+                // Logo upload and preview
                 let imageData = suggestion.image || "";
 
                 const logoSection = document.createElement("div");
@@ -175,6 +203,7 @@
                 const preview = document.createElement("img");
                 preview.className = "logo-preview";
                 preview.alt = "Logo preview";
+
                 if (imageData) {
                     preview.src = imageData;
                 } else {
@@ -184,11 +213,14 @@
                 const fileInput = document.createElement("input");
                 fileInput.type = "file";
                 fileInput.accept = "image/*";
+
                 fileInput.addEventListener("change", () => {
                     const file = fileInput.files[0];
+
                     if (!file) {
                         return;
                     }
+
                     resizeImage(file, dataUrl => {
                         imageData = dataUrl;
                         preview.src = dataUrl;
@@ -207,51 +239,138 @@
                 const status = document.createElement("p");
                 status.className = "card-status";
 
-                const saveBtn = makeButton("Save Changes", "btn", () => {
-                    const updated = {};
-                    grid.querySelectorAll("input, select").forEach(input => {
-                        updated[input.name] = input.value;
-                    });
-                    updated.image = imageData;
+                // Save changes
+                const saveBtn = makeButton(
+                    "Save Changes",
+                    "btn",
+                    () => {
+                        const updated = {};
 
-                    fetch(API + "/api/suggestions/" + suggestion.id, {
-                        method: "PUT",
-                        headers: { ...authHeaders, "Content-Type": "application/json" },
-                        body: JSON.stringify(updated)
-                    }).then(() => {
-                        status.textContent = "Saved ✓";
-                    });
-                });
+                        grid.querySelectorAll("input, select")
+                            .forEach(input => {
+                                updated[input.name] = input.value;
+                            });
 
-                const approveBtn = makeButton("Approve", "btn btn-primary", () => {
-                    saveBtn.click();
-                    fetch(API + "/api/suggestions/" + suggestion.id + "/approve",
-                        { method: "POST", headers: authHeaders })
-                        .then(() => {
-                            card.remove();
-                            loadApproved();
-                        });
-                });
+                        updated.image = imageData;
 
-                const rejectBtn = makeButton("Reject", "btn btn-danger", () => {
-                    fetch(API + "/api/suggestions/" + suggestion.id + "/reject",
-                        { method: "POST", headers: authHeaders })
-                        .then(() => card.remove());
-                });
+                        fetch(API + "/api/suggestions/" + suggestion.id, {
+                            method: "PUT",
+                            headers: {
+                                ...authHeaders,
+                                "Content-Type": "application/json"
+                            },
+                            body: JSON.stringify(updated)
+                        })
+                            .then(response => {
+                                if (!response.ok) {
+                                    throw new Error("Could not save changes.");
+                                }
+
+                                status.textContent = "Saved ✓";
+                            })
+                            .catch(() => {
+                                status.textContent = "Could not save changes.";
+                            });
+                    }
+                );
+
+                // Approve suggestion
+                const approveBtn = makeButton(
+                    "Approve",
+                    "btn btn-primary",
+                    () => {
+                        const updated = {};
+
+                        grid.querySelectorAll("input, select")
+                            .forEach(input => {
+                                updated[input.name] = input.value;
+                            });
+
+                        updated.image = imageData;
+
+                        fetch(API + "/api/suggestions/" + suggestion.id, {
+                            method: "PUT",
+                            headers: {
+                                ...authHeaders,
+                                "Content-Type": "application/json"
+                            },
+                            body: JSON.stringify(updated)
+                        })
+                            .then(response => {
+                                if (!response.ok) {
+                                    throw new Error("Could not save changes.");
+                                }
+
+                                return fetch(
+                                    API + "/api/suggestions/" +
+                                    suggestion.id + "/approve",
+                                    {
+                                        method: "POST",
+                                        headers: authHeaders
+                                    }
+                                );
+                            })
+                            .then(response => {
+                                if (!response.ok) {
+                                    throw new Error("Could not approve suggestion.");
+                                }
+
+                                card.remove();
+                                loadApproved();
+                            })
+                            .catch(() => {
+                                status.textContent = "Could not approve suggestion.";
+                            });
+                    }
+                );
+
+                // Reject suggestion
+                const rejectBtn = makeButton(
+                    "Reject",
+                    "btn btn-danger",
+                    () => {
+                        fetch(
+                            API + "/api/suggestions/" +
+                            suggestion.id + "/reject",
+                            {
+                                method: "POST",
+                                headers: authHeaders
+                            }
+                        )
+                            .then(response => {
+                                if (!response.ok) {
+                                    throw new Error("Could not reject suggestion.");
+                                }
+
+                                card.remove();
+                            })
+                            .catch(() => {
+                                status.textContent = "Could not reject suggestion.";
+                            });
+                    }
+                );
 
                 actions.appendChild(saveBtn);
                 actions.appendChild(approveBtn);
                 actions.appendChild(rejectBtn);
+
                 card.appendChild(actions);
                 card.appendChild(status);
+
                 list.appendChild(card);
             });
         }
 
-        // List approved opportunities with a remove button.
+        // Load approved opportunities
         function loadApproved() {
             fetch(API + "/api/opportunities")
-                .then(response => response.json())
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error("Could not load opportunities.");
+                    }
+
+                    return response.json();
+                })
                 .then(opportunities => {
                     const list = document.getElementById("approvedList");
                     list.innerHTML = "";
@@ -279,7 +398,9 @@
 
                         const details = document.createElement("p");
                         details.textContent =
-                            (opp.organization || "") + " — " + (opp.category || "");
+                            (opp.organization || "") +
+                            " — " +
+                            (opp.category || "");
 
                         const link = document.createElement("a");
                         link.href = opp.official_website;
@@ -290,52 +411,89 @@
                         const actions = document.createElement("div");
                         actions.className = "card-actions";
 
-                        const removeBtn = makeButton("Remove", "btn btn-danger", () => {
-                            fetch(API + "/api/suggestions/" + opp.id,
-                                { method: "DELETE", headers: authHeaders })
-                                .then(() => card.remove());
-                        });
+                        const removeBtn = makeButton(
+                            "Remove",
+                            "btn btn-danger",
+                            () => {
+                                fetch(
+                                    API + "/api/suggestions/" + opp.id,
+                                    {
+                                        method: "DELETE",
+                                        headers: authHeaders
+                                    }
+                                )
+                                    .then(response => {
+                                        if (!response.ok) {
+                                            throw new Error("Could not remove opportunity.");
+                                        }
+
+                                        card.remove();
+                                    });
+                            }
+                        );
 
                         actions.appendChild(removeBtn);
+
                         card.appendChild(title);
                         card.appendChild(details);
                         card.appendChild(link);
                         card.appendChild(actions);
+
                         list.appendChild(card);
                     });
+                })
+                .catch(error => {
+                    console.error(error);
                 });
         }
 
-        // Shrink an uploaded image so it fits nicely in the database,
-        // then hand back a data URL that <img src="..."> can use directly.
+        // Resize uploaded images
         function resizeImage(file, done) {
             const reader = new FileReader();
+
             reader.onload = () => {
                 const img = new Image();
+
                 img.onload = () => {
                     const maxSize = 400;
+
                     const scale = Math.min(
-                        1, maxSize / Math.max(img.width, img.height)
+                        1,
+                        maxSize / Math.max(img.width, img.height)
                     );
+
                     const canvas = document.createElement("canvas");
+
                     canvas.width = img.width * scale;
                     canvas.height = img.height * scale;
+
                     canvas.getContext("2d").drawImage(
-                        img, 0, 0, canvas.width, canvas.height
+                        img,
+                        0,
+                        0,
+                        canvas.width,
+                        canvas.height
                     );
+
                     done(canvas.toDataURL("image/png"));
                 };
+
                 img.src = reader.result;
             };
+
             reader.readAsDataURL(file);
         }
 
+        // Create buttons
         function makeButton(text, className, onClick) {
             const button = document.createElement("button");
+
             button.type = "button";
             button.textContent = text;
             button.className = className;
+
             button.addEventListener("click", onClick);
+
             return button;
         }
     </script>

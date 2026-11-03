@@ -1,8 +1,3 @@
-
-/* ================================
-   GLOBAL
-================================ */
-
 * {
     box-sizing: border-box;
 }
@@ -37,10 +32,6 @@ select {
 img {
     max-width: 100%;
 }
-
-/* ================================
-   NAVIGATION
-================================ */
 
 .navbar {
     display: flex;
@@ -96,10 +87,6 @@ nav a[aria-current="page"] {
     color: var(--blue);
 }
 
-/* ================================
-   ANIMATED LOGO UNDERLINE
-================================ */
-
 .squiggly-line {
     display: block;
     width: 150px;
@@ -120,10 +107,6 @@ nav a[aria-current="page"] {
         stroke-dashoffset: 0;
     }
 }
-
-/* ================================
-   MAIN LAYOUT
-================================ */
 
 .main {
     display: grid;
@@ -152,10 +135,6 @@ nav a[aria-current="page"] {
     min-width: 0;
 }
 
-/* ================================
-   SEARCH
-================================ */
-
 #searchBar {
     display: block;
     width: 100%;
@@ -177,10 +156,6 @@ input:focus-visible {
     outline: 2px solid var(--light-blue);
     outline-offset: 3px;
 }
-
-/* ================================
-   CATEGORY BUTTONS
-================================ */
 
 .filter-buttons {
     display: flex;
@@ -208,10 +183,6 @@ input:focus-visible {
     background: var(--light-blue);
     color: var(--text);
 }
-
-/* ================================
-   FILTER SIDEBAR
-================================ */
 
 .filter-sidebar {
     position: sticky;
@@ -292,10 +263,6 @@ input:focus-visible {
     background: #dceefa;
 }
 
-/* ================================
-   OPPORTUNITY GRID
-================================ */
-
 .card-grid {
     display: grid;
     grid-area: cards;
@@ -345,10 +312,6 @@ input:focus-visible {
     text-align: center;
 }
 
-/* ================================
-   WEBSITE LINKS
-================================ */
-
 .website-link,
 .card a {
     display: inline-block;
@@ -366,10 +329,6 @@ input:focus-visible {
     color: #000000;
     text-decoration: underline;
 }
-
-/* ================================
-   CATEGORY TAGS
-================================ */
 
 .card-top-tags {
     display: flex;
@@ -419,10 +378,6 @@ input:focus-visible {
     color: #9b6532;
 }
 
-/* ================================
-   OPPORTUNITY DETAILS
-================================ */
-
 .opportunity-details {
     display: flex;
     flex-direction: column;
@@ -456,35 +411,26 @@ input:focus-visible {
     width: 100%;
 }
 
-/* ================================
-   DETAIL TAG COLORS
-================================ */
-
-/* Spring — purple */
 .season-tag {
     background: #ad376d;
     color: white;
 }
 
-/* Summer — brighter orange */
 .summer-tag {
     background: #ffb347;
     color: #ffffff;
 }
 
-/* Fall — previous Summer colors */
 .fall-tag {
     background: #f4a261;
     color: #713b0b;
 }
 
-/* School Year — light red */
 .school-year-tag {
     background: #fde2e2;
     color: #b42318;
 }
 
-/* Ends Soon — inverse of School Year */
 .ends-soon-tag,
 .soon-tag {
     background: #b42318;
@@ -537,10 +483,6 @@ input:focus-visible {
     filter: brightness(0.96);
 }
 
-/* ================================
-   MEDIUM SCREENS
-================================ */
-
 @media (max-width: 1050px) {
     .navbar {
         justify-content: center;
@@ -574,10 +516,6 @@ input:focus-visible {
         font-size: 12px;
     }
 }
-
-/* ================================
-   TABLETS AND NARROW WINDOWS
-================================ */
 
 @media (max-width: 760px) {
     .navbar {
@@ -621,10 +559,6 @@ input:focus-visible {
         white-space: normal;
     }
 }
-
-/* ================================
-   PHONES
-================================ */
 
 @media (max-width: 480px) {
     .navbar {
@@ -690,10 +624,6 @@ input:focus-visible {
     }
 }
 
-/* ================================
-   REDUCED MOTION
-================================ */
-
 @media (prefers-reduced-motion: reduce) {
     *,
     *::before,
@@ -754,10 +684,6 @@ input:focus-visible {
     background: #333333;
 }
 
-/* ================================
-   SUGGEST AN OPPORTUNITY BUTTON
-================================ */
-
 #suggestOpportunityBtn {
     display: inline-flex;
     align-items: center;
@@ -784,10 +710,6 @@ input:focus-visible {
     background: #326789;
     transform: translateY(-1px);
 }
-
-/* ================================
-   SUGGESTION DIALOG
-================================ */
 
 .suggest-dialog {
     width: min(620px, calc(100% - 28px));
