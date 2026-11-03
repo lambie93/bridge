@@ -3,7 +3,7 @@
 A curated directory of opportunities for high school and early college students in the New York City area.
 
 <div align="center">
-  <img src="./images/dashboard.png" alt="Dashboard Preview" width="800">
+  <img src="images/dashboard.png" alt="Dashboard Preview" width="800">
 </div>
 
 
