@@ -1,12 +1,14 @@
 # Bridge
 
+**About**
+<br>
 A curated directory of opportunities for high school and early college students in the New York City area.
 
 <div align="center">
-  <img src="images/dashboard.png" alt="Dashboard Preview" width="800">
+  <img src="./images/bridge-dashboard.png" alt="Bridge Dashboard Preview" width="800">
 </div>
 
-
+**Live Demo:** https://bridge-v2-699i.onrender.com
 When students go to it, they will see a dashboard with recommended opportunity. An opportunity is something like a scholarship, a summer program, a contest, etc. When they see an opportunity on the screen, they see a card with the grade and ages you need to be, and also the subject area. They see an image / logo. There is a button that takes them to each opportunity's website.
 
 There are filtering tools to filter by criteria - ex. some need to be female identifying or male identifying.
