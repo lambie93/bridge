@@ -1,18 +1,18 @@
 # Bridge
 
-**About**
-<br>
+## About
+
 A curated directory of opportunities for high school and early college students in the New York City area.
 
 <div align="center">
   <img src="./images/bridge-dashboard.png" alt="Bridge Dashboard Preview" width="800">
 </div>
 
-**Live Demo:** https://bridge-v2-699i.onrender.com
-When students go to it, they will see a dashboard with recommended opportunity. An opportunity is something like a scholarship, a summer program, a contest, etc. When they see an opportunity on the screen, they see a card with the grade and ages you need to be, and also the subject area. They see an image / logo. There is a button that takes them to each opportunity's website.
+**Live Demo:** [https://bridge-v2-699i.onrender.com](https://bridge-v2-699i.onrender.com)
 
-There are filtering tools to filter by criteria - ex. some need to be female identifying or male identifying.
+## Features
 
-The website is at a live URL and open source on GitHub.
-
-There will be an admin dashboard to add, edit, and remove opportunities. Users will also be able to suggest opportunities and have them reviewed by an admin.
+- Browse a card-based collection of scholarships, internships, academic programs, competitions, hackathons, volunteer opportunities, research opportunities, and more.
+- Refine search results using filters for age, grade level, time of year, season, cost, location, application status, and gender eligibility.
+- Submit suggestions for additional opportunities to be reviewed for inclusion on the platform.
+- Manage opportunity listings through a password-protected admin dashboard, with the ability to add, edit, and delete entries.
